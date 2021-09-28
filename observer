@@ -1,0 +1,126 @@
+package com.company;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Forum jobforum = new Forum();
+        jobforum.addvakans("Вакансия № 1");
+        jobforum.addvakans("Вакансия № 2");
+        jobforum.addvakans("Вакансия № 3");
+        jobforum.addvakans("Вакансия № 4");
+        jobforum.addvakans("Вакансия № 5");
+
+        Observer user1 = new Forum_User("Timur");
+        jobforum.addObserver(user1);
+        Observer user2 = new Forum_User("Anton");
+        jobforum.addObserver(user2);
+        Observer user3 = new Forum_User("Damir");
+        jobforum.addObserver(user3);
+
+
+
+
+    }
+}
+
+
+____________________________________________________________
+
+
+
+package com.company;
+
+import java.util.List;
+
+public interface Observer {
+    public void handle_Event(List<String> vakansya) ;
+}
+
+
+____________________________________________________________
+
+
+package com.company;
+
+public interface Obsevrved {
+    public void addObserver(Observer observer) ;
+
+    public void removeObserver (Observer observer) ;
+
+    public void notificationObserver() ;
+
+
+}
+
+
+
+_____________________________________________________________
+
+
+
+package com.company;
+import java.util.List;
+
+public class Forum_User implements Observer{
+
+    String name ;
+
+    public Forum_User (String name) {
+        this.name = name ;
+    }
+    @Override
+    public void handle_Event(List<String> vakansya) {
+        System.out.println("Здравствуйте "+ name + " у нас есть новые вакансии может вам будет интересно \n");
+        System.out.println(vakansya + "\n");
+    }
+}
+
+
+
+_____________________________________________________________
+
+
+
+package com.company;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Forum implements Obsevrved{
+    List<String> vakansya = new ArrayList<>();
+    List<Observer> forum_user = new ArrayList<>();
+
+    public void addvakans (String vakansya){
+        this.vakansya.add(vakansya) ;
+        notificationObserver();
+    }
+
+    public void removevakans (String vakansya) {
+        this.vakansya.remove(vakansya);
+        notificationObserver();
+    }
+
+
+    @Override
+    public void addObserver(Observer observer) {
+        this.forum_user.add(observer);
+        notificationObserver();
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        this.forum_user.remove(observer);
+
+    }
+
+    @Override
+    public void notificationObserver() {
+    for (Observer observer : forum_user) {
+        observer.handle_Event(this.vakansya);
+    }
+    }
+
+}
+
+
